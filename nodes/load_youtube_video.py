@@ -194,9 +194,9 @@ class LoadYoutubeVideo:
             video_save_path = os.path.join(output_dir,video_title) + ".mp4"
             if not os.path.isfile(video_save_path):
                 subprocess.run(f"yt-dlp -q -f 22 {url} -o '{video_save_path}'", shell=True)
-                print(f"[⭐PRONODES] Downloaded video to {video_save_path}")
+                print(f"PRONODES] Downloaded video to {video_save_path}")
             else:
-                print(f"[⭐PRONODES] '{video_title}.mp4' exists.. skipping download")
+                print(f"[PRONODES] '{video_title}.mp4' exists.. skipping download")
 
             # load video frames
             gen = cv_frame_generator(video_save_path, frame_load_cap, skip_first_frames, select_every_nth)
@@ -208,7 +208,7 @@ class LoadYoutubeVideo:
             # Some minor wizardry to eliminate a copy and reduce max memory by a factor of ~2
             images = torch.from_numpy(np.fromiter(gen, np.dtype((np.float32, (height, width, 3)))))
             if len(images) == 0:
-                raise Exception("[⭐PRONODES] No frames generated")
+                raise Exception("[PRONODES] No frames generated")
 
 
             #Setup lambda for lazy audio capture
