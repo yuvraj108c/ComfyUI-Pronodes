@@ -3,6 +3,7 @@ import os, subprocess
 import torch
 import numpy as np
 import cv2
+import shutil
 
 # Source: https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite
 
