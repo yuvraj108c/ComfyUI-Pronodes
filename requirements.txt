@@ -1,0 +1,3 @@
+yt_dlp
+opencv-python
+imageio_ffmpeg
