@@ -1,11 +1,11 @@
-from .nodes.load_youtube_video import LoadYoutubeVideo
+from .nodes.download_youtube_video import DownloadYoutubeVideo
  
 NODE_CLASS_MAPPINGS = { 
-    "LoadYoutubeVideo" : LoadYoutubeVideo
+    "DownloadYoutubeVideo" : DownloadYoutubeVideo
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-     "LoadYoutubeVideo" : "⭐Load Youtube Video",
+     "DownloadYoutubeVideo" : "⭐ Download Youtube Video",
 }
 
 __all__ = ['NODE_CLASS_MAPPINGS', 'NODE_DISPLAY_NAME_MAPPINGS']
