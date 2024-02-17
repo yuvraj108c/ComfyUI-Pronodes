@@ -51,7 +51,7 @@ class LoadYoutubeVideoNode:
             data = [
                 {
                     "frame_rate":frame_rate,
-                    "resolution":f"{width}x{height}",
+                    "resolution":f"{width} x {height}",
                     "video_title":video_title
                 }
             ] 
