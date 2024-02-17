@@ -1,9 +1,8 @@
 import imageio
 
-def get_video_fps(video_path):
+def get_video_metadata(video_path):
     reader = imageio.get_reader(video_path)
-    fps = reader.get_meta_data()['fps']
-    return fps
+    return reader.get_meta_data()
 
 def clean_string(input_string):
     invalid_chars = ['\\', '/', ':', '*', '?', '"', '<', '>', '|']

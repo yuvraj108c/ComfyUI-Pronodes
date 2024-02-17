@@ -71,9 +71,9 @@ const youtube_video_preview = {
                                 w.videoEl.src = previewUrl
                             }
                             if (message?.data) {
-                                const { frame_rate, video_title } = message.data[0]
+                                const { frame_rate, video_title, resolution } = message.data[0]
                                 w.textEl.hidden = false
-                                w.textEl.value = `FPS: ${frame_rate}\nTITLE: ${video_title}`
+                                w.textEl.value = `FPS: ${frame_rate}, RESOLUTION: ${resolution}\nTITLE: ${video_title}`
                             }
                         }
                     }

@@ -1,6 +1,6 @@
 from yt_dlp import YoutubeDL
 import os, subprocess
-from .utils import clean_string, get_video_fps
+from .utils import clean_string, get_video_metadata
 
 class LoadYoutubeVideoNode:
     @classmethod
@@ -36,7 +36,10 @@ class LoadYoutubeVideoNode:
             else:
                 print(f"[PRONODES] '{video_title}.mp4' exists.. skipping download")
 
-            frame_rate = int(get_video_fps(video_save_path))
+            metadata = get_video_metadata(video_save_path)
+            fps = int(metadata["fps"])
+            width,height = metadata["source_size"]
+            
             previews = [
                 {
                     "filename":f"{video_title}.mp4",
@@ -48,6 +51,7 @@ class LoadYoutubeVideoNode:
             data = [
                 {
                     "frame_rate":frame_rate,
+                    "resolution":f"{width}x{height}",
                     "video_title":video_title
                 }
             ] 
