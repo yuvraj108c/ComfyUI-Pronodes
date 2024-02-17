@@ -37,7 +37,7 @@ class LoadYoutubeVideoNode:
                 print(f"[PRONODES] '{video_title}.mp4' exists.. skipping download")
 
             metadata = get_video_metadata(video_save_path)
-            fps = int(metadata["fps"])
+            frame_rate = int(metadata["fps"])
             width,height = metadata["source_size"]
             
             previews = [
