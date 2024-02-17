@@ -1,7 +1,7 @@
 # ⚡ ComfyUI Pronodes
 
 - A collection of nice utility nodes for ComfyUI (still in development)
-- Install via the manager
+- Install via the [ComfyUI-Manager](https://github.com/ltdrdata/ComfyUI-Manager)
 
 ## Nodes List
 
