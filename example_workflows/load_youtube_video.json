@@ -1,17 +1,17 @@
 {
-  "last_node_id": 34,
-  "last_link_id": 59,
+  "last_node_id": 11,
+  "last_link_id": 8,
   "nodes": [
     {
-      "id": 21,
+      "id": 10,
       "type": "VHS_LoadVideoPath",
       "pos": [
-        581,
-        357
+        936,
+        212
       ],
       "size": [
         317.4000244140625,
-        194
+        218
       ],
       "flags": {},
       "order": 1,
@@ -20,12 +20,13 @@
         {
           "name": "batch_manager",
           "type": "VHS_BatchManager",
-          "link": null
+          "link": null,
+          "slot_index": 0
         },
         {
           "name": "video",
           "type": "STRING",
-          "link": 34,
+          "link": 5,
           "widget": {
             "name": "video"
           },
@@ -37,10 +38,9 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            59
+            6
           ],
-          "shape": 3,
-          "slot_index": 0
+          "shape": 3
         },
         {
           "name": "frame_count",
@@ -52,10 +52,9 @@
           "name": "audio",
           "type": "VHS_AUDIO",
           "links": [
-            36
+            7
           ],
-          "shape": 3,
-          "slot_index": 2
+          "shape": 3
         }
       ],
       "properties": {
@@ -80,59 +79,17 @@
             "filename": "X://insert/path/here.mp4",
             "type": "path",
             "format": "video/mp4",
-            "select_every_nth": 1,
-            "force_size": "Disabled"
+            "select_every_nth": 1
           }
         }
       }
     },
     {
-      "id": 23,
-      "type": "DownloadYoutubeVideo",
-      "pos": [
-        147,
-        399
-      ],
-      "size": {
-        "0": 315,
-        "1": 102
-      },
-      "flags": {},
-      "order": 0,
-      "mode": 0,
-      "outputs": [
-        {
-          "name": "video_path",
-          "type": "STRING",
-          "links": [
-            34
-          ],
-          "shape": 3
-        },
-        {
-          "name": "frame_rate",
-          "type": "INT",
-          "links": [
-            39
-          ],
-          "shape": 3,
-          "slot_index": 1
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "DownloadYoutubeVideo"
-      },
-      "widgets_values": [
-        "https://www.youtube.com/shorts/SXHMnicI6Pg",
-        "output/youtube"
-      ]
-    },
-    {
-      "id": 24,
+      "id": 11,
       "type": "VHS_VideoCombine",
       "pos": [
-        1016,
-        338
+        1321,
+        216
       ],
       "size": [
         315,
@@ -145,27 +102,28 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 59,
+          "link": 6,
           "slot_index": 0
         },
         {
           "name": "audio",
           "type": "VHS_AUDIO",
-          "link": 36
+          "link": 7,
+          "slot_index": 1
         },
         {
           "name": "batch_manager",
           "type": "VHS_BatchManager",
-          "link": null,
-          "slot_index": 2
+          "link": null
         },
         {
           "name": "frame_rate",
           "type": "INT",
-          "link": 39,
+          "link": 8,
           "widget": {
             "name": "frame_rate"
-          }
+          },
+          "slot_index": 3
         }
       ],
       "outputs": [
@@ -180,60 +138,101 @@
         "Node name for S&R": "VHS_VideoCombine"
       },
       "widgets_values": {
-        "frame_rate": 24,
+        "frame_rate": 8,
         "loop_count": 0,
         "filename_prefix": "Youtube",
         "format": "video/h264-mp4",
         "pix_fmt": "yuv420p",
         "crf": 19,
-        "save_metadata": false,
+        "save_metadata": true,
         "pingpong": false,
         "save_output": false,
         "videopreview": {
           "hidden": false,
           "paused": false,
           "params": {
-            "filename": "AnimateDiff_00015-audio.mp4",
+            "filename": "Youtube_00001-audio.mp4",
             "subfolder": "",
-            "type": "output",
+            "type": "temp",
             "format": "video/h264-mp4"
           }
         }
       }
+    },
+    {
+      "id": 9,
+      "type": "LoadYoutubeVideoNode",
+      "pos": [
+        527,
+        247
+      ],
+      "size": [
+        315,
+        683
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "video_path",
+          "type": "STRING",
+          "links": [
+            5
+          ],
+          "shape": 3,
+          "slot_index": 0
+        },
+        {
+          "name": "frame_rate",
+          "type": "INT",
+          "links": [
+            8
+          ],
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadYoutubeVideoNode"
+      },
+      "widgets_values": [
+        "https://www.youtube.com/shorts/SXHMnicI6Pg",
+        null
+      ]
     }
   ],
   "links": [
     [
-      34,
-      23,
+      5,
+      9,
       0,
-      21,
+      10,
       1,
       "STRING"
     ],
     [
-      36,
-      21,
+      6,
+      10,
+      0,
+      11,
+      0,
+      "IMAGE"
+    ],
+    [
+      7,
+      10,
       2,
-      24,
+      11,
       1,
       "VHS_AUDIO"
     ],
     [
-      39,
-      23,
+      8,
+      9,
       1,
-      24,
+      11,
       3,
       "INT"
-    ],
-    [
-      59,
-      21,
-      0,
-      24,
-      0,
-      "IMAGE"
     ]
   ],
   "groups": [],

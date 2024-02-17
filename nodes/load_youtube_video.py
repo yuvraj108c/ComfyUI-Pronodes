@@ -2,13 +2,12 @@ from yt_dlp import YoutubeDL
 import os, subprocess
 from .utils import clean_string, get_video_fps
 
-class DownloadYoutubeVideo:
+class LoadYoutubeVideoNode:
     @classmethod
     def INPUT_TYPES(s):
         return {
             "required": { 
                 "url": ("STRING",{"default":""}),
-                "output_dir": ("STRING",{"default":"output/youtube"}),
             }
         }
 
@@ -16,9 +15,12 @@ class DownloadYoutubeVideo:
     RETURN_NAMES = ("video_path","frame_rate",)
     FUNCTION = "main"
     CATEGORY = "Pronodes"
+    OUTPUT_NODE=True
 
-    def main(self,url,output_dir):
+    def main(self,url):
         try:
+            subfolder = "youtube"
+            output_dir = f"output/{subfolder}"
             os.makedirs(output_dir,exist_ok=True)
 
             # get video title
@@ -35,7 +37,22 @@ class DownloadYoutubeVideo:
                 print(f"[PRONODES] '{video_title}.mp4' exists.. skipping download")
 
             frame_rate = int(get_video_fps(video_save_path))
-            return (video_save_path,frame_rate,)
+            previews = [
+                {
+                    "filename":f"{video_title}.mp4",
+                    "subfolder":subfolder,
+                    "format":"video/h264-mp4",
+                    "type":"output",
+                }
+            ]
+            data = [
+                {
+                    "frame_rate":frame_rate,
+                    "video_title":video_title
+                }
+            ] 
+            return {"ui": {"previews":previews,"data":data},"result": (video_save_path,frame_rate,)}
+
 
         except Exception as e:
             raise e

@@ -1,16 +1,19 @@
-# ⭐ ComfyUI Pronodes
+# ⚡ ComfyUI Pronodes
 
 - A collection of nice utility nodes for ComfyUI (still in development)
 - Install via the manager
 
 ## Nodes List
 
-### Download Youtube Video
+### Load Youtube Video
 
-- Downloads video from youtube url and saves to specified output directory
+- Downloads video from youtube url and saves to /output directory
 - Automatically skips download if video already exists locally
+- Displays the video and other details (fps/title) at the bottom of the node
+- Seamless integration with [ComfyUI-VideoHelperSuite](https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite)
 
-## Log
+## Changelog
 
-- 14/02/2024 - Setup repository + publish to manager + Add Download Youtube Video Node (DYV)
+- 14/02/2024 - Setup repository + publish to manager + Add Load Youtube Video Node (LYV)
 - 15/02/2024 - Simplify DYV node & remove VHS codes
+- 17/02/2024 - Added video + fps + title preview under LYV node

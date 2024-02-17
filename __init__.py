@@ -1,11 +1,12 @@
-from .nodes.download_youtube_video import DownloadYoutubeVideo
+from .nodes.load_youtube_video import LoadYoutubeVideoNode
  
 NODE_CLASS_MAPPINGS = { 
-    "DownloadYoutubeVideo" : DownloadYoutubeVideo
+    "LoadYoutubeVideoNode" : LoadYoutubeVideoNode,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-     "DownloadYoutubeVideo" : "⭐ Download Youtube Video",
+     "LoadYoutubeVideoNode" : "⚡ Load Youtube Video",
 }
 
-__all__ = ['NODE_CLASS_MAPPINGS', 'NODE_DISPLAY_NAME_MAPPINGS']
+WEB_DIRECTORY = "./web"
+__all__ = ['NODE_CLASS_MAPPINGS', 'NODE_DISPLAY_NAME_MAPPINGS','WEB_DIRECTORY']

@@ -1,2 +1,2 @@
 yt_dlp
-imageio
+imageio[ffmpeg]
