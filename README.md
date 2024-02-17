@@ -15,5 +15,5 @@
 ## Changelog
 
 - 14/02/2024 - Setup repository + publish to manager + Add Load Youtube Video Node (LYV)
-- 15/02/2024 - Simplify DYV node & remove VHS codes
+- 15/02/2024 - Simplify LYV node & remove VHS codes
 - 17/02/2024 - Added video + fps + title preview under LYV node
