@@ -1,6 +1,7 @@
 from yt_dlp import YoutubeDL
 import os, subprocess
 from .utils import clean_string, get_video_metadata
+import folder_paths
 
 class LoadYoutubeVideoNode:
     @classmethod
@@ -20,7 +21,7 @@ class LoadYoutubeVideoNode:
     def main(self,url):
         try:
             subfolder = "youtube"
-            output_dir = f"output/{subfolder}"
+            output_dir = os.path.join(folder_paths.get_output_directory(), subfolder)
             os.makedirs(output_dir,exist_ok=True)
 
             # get video title
