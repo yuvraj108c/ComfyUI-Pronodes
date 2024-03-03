@@ -14,6 +14,7 @@
 
 ## Changelog
 
-- 14/02/2024 - Setup repository + publish to manager + Add Load Youtube Video Node (LYV)
-- 15/02/2024 - Simplify LYV node & remove VHS codes
+- 03/02/2024 - Refactor js with chaincallback (from VHS) + display video on reload
 - 17/02/2024 - Added video + fps + title + resolution preview under LYV node
+- 15/02/2024 - Simplify LYV node & remove VHS codes
+- 14/02/2024 - Setup repository + publish to manager + Add Load Youtube Video Node (LYV)

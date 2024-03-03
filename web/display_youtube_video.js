@@ -1,88 +1,166 @@
 import { app } from '../../../scripts/app.js'
 import { api } from '../../../scripts/api.js'
 
-// https://github.com/yolain/ComfyUI-Easy-Use/blob/be8df4e6faec6892d3007b63adb0c0b3ef510e59/web/js/image.js
-// https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite/blob/ca8494b38006c76f5b0f02eade284998dbab011e/web/js/VHS.core.js#L347
-// https://github.com/Kosinkadink/ComfyUI-AnimateDiff-Evolved/blob/main/web/js/gif_preview.js
+// Copied from videohelpersuite
+// https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite/blob/ca8494b38006c76f5b0f02eade284998dbab011e/web/js/VHS.core.js
 
-const youtube_video_preview = {
-    name: 'Pronodes.youtube_video_preview',
-    nodeCreated(node) {
-        if (node.getTitle() == "⚡ Load Youtube Video") {
-            const element = document.createElement("div");
-            const previewWidget = node.addDOMWidget("datapreview", "preview", element, {
-                getValue() {
-                    return element.value;
-                },
-                setValue(v) {
-                    element.src = v;
-                },
-                serialize: false,
-            });
-            element.style['pointer-events'] = "none"
+function fitHeight(node) {
+    node.setSize([node.size[0], node.computeSize([node.size[0], node.size[1]])[1]])
+    node?.graph?.setDirtyCanvas(true);
+}
 
-            // text
-            previewWidget.textEl = document.createElement("textarea");
-            previewWidget.textEl.className = "comfy-multiline-input";
-            previewWidget.textEl.style["width"] = "100%"
-            previewWidget.textEl.readOnly = true
-            previewWidget.textEl.rows = 3
-            previewWidget.textEl.style.color = "#00FF41"
-            previewWidget.textEl.style.overflow = "hidden"
-            previewWidget.textEl.style["font-size"] = "smaller"
-            previewWidget.textEl.style["padding"] = "4%"
-            previewWidget.textEl.style["background-color"] = "black"
-            previewWidget.textEl.hidden = true
-            element.appendChild(previewWidget.textEl)
-
-            // video
-            previewWidget.videoEl = document.createElement("video");
-            previewWidget.videoEl.autoplay = true
-            previewWidget.videoEl.loop = true
-            previewWidget.videoEl.muted = true
-            previewWidget.videoEl.controls = true
-            previewWidget.videoEl.hidden = true
-            previewWidget.videoEl.style["width"] = "100%"
-            previewWidget.videoEl.style["pointer-events"] = "initial"
-            element.appendChild(previewWidget.videoEl)
-
-            previewWidget.videoEl.addEventListener("loadedmetadata", () => {
-                node.setSize([node.size[0], previewWidget.videoEl.offsetHeight + 160])
-                node?.graph?.setDirtyCanvas(true);
-            });
-        }
-    },
-    async beforeRegisterNodeDef(nodeType, nodeData, app) {
-        switch (nodeData.name) {
-            case 'LoadYoutubeVideoNode': {
-                const onExecuted = nodeType.prototype.onExecuted
-                nodeType.prototype.onExecuted = function (message) {
-                    const r = onExecuted ? onExecuted.apply(this, message) : undefined
-                    if (this.widgets) {
-                        const pos = this.widgets.findIndex((w) => w.name === "datapreview");
-                        if (pos !== -1 && this.widgets[pos]) {
-                            const w = this.widgets[pos]
-
-                            if (message?.previews) {
-                                const previewUrl = api.apiURL(
-                                    '/view?' + new URLSearchParams(message.previews[0]).toString()
-                                )
-                                w.videoEl.hidden = false
-                                w.videoEl.src = previewUrl
-                            }
-                            if (message?.data) {
-                                const { frame_rate, video_title, resolution } = message.data[0]
-                                w.textEl.hidden = false
-                                w.textEl.value = `FPS: ${frame_rate}, RESOLUTION: ${resolution}\nTITLE: ${video_title}`
-                            }
-                        }
-                    }
-                    return r
-                }
-                break
-            }
-        }
+function chainCallback(object, property, callback) {
+    if (object == undefined) {
+        //This should not happen.
+        console.error("Tried to add callback to non-existant object")
+        return;
+    }
+    if (property in object) {
+        const callback_orig = object[property]
+        object[property] = function () {
+            const r = callback_orig.apply(this, arguments);
+            callback.apply(this, arguments);
+            return r
+        };
+    } else {
+        object[property] = callback;
     }
 }
 
-app.registerExtension(youtube_video_preview)
+function addVideoPreview(nodeType) {
+    chainCallback(nodeType.prototype, "onNodeCreated", function () {
+        var element = document.createElement("div");
+        const previewNode = this;
+        var previewWidget = this.addDOMWidget("videopreview", "preview", element, {
+            serialize: false,
+            hideOnZoom: false,
+            getValue() {
+                return element.value;
+            },
+            setValue(v) {
+                element.value = v;
+            },
+        });
+        previewWidget.computeSize = function (width) {
+            const textPreviewHeight = 70
+            if (this.aspectRatio && !this.parentEl.hidden) {
+                let height = (previewNode.size[0] - 20) / this.aspectRatio + 10 + textPreviewHeight;
+                if (!(height > 0)) {
+                    height = 0;
+                }
+                this.computedHeight = height + 10 + textPreviewHeight;
+                return [width, height];
+            }
+            return [width, -4];//no loaded src, widget should not display
+        }
+        // element.style['pointer-events'] = "none"
+        previewWidget.value = { hidden: false, paused: false, params: {} }
+        previewWidget.parentEl = document.createElement("div");
+        previewWidget.parentEl.className = "pronodes_preview";
+        previewWidget.parentEl.style['width'] = "100%"
+        element.appendChild(previewWidget.parentEl);
+        previewWidget.videoEl = document.createElement("video");
+        previewWidget.videoEl.controls = true;
+        previewWidget.videoEl.loop = true;
+        previewWidget.videoEl.muted = true;
+        previewWidget.videoEl.style['width'] = "100%"
+        previewWidget.videoEl.addEventListener("loadedmetadata", () => {
+
+            previewWidget.aspectRatio = previewWidget.videoEl.videoWidth / previewWidget.videoEl.videoHeight;
+            fitHeight(this);
+        });
+        previewWidget.videoEl.addEventListener("error", () => {
+            //TODO: consider a way to properly notify the user why a preview isn't shown.
+            previewWidget.parentEl.hidden = true;
+            fitHeight(this);
+        });
+
+        // text
+        previewWidget.textEl = document.createElement("textarea");
+        previewWidget.textEl.className = "comfy-multiline-input";
+        previewWidget.textEl.style["width"] = "100%"
+        previewWidget.textEl.readOnly = true
+        previewWidget.textEl.rows = 3
+        previewWidget.textEl.style.color = "#00FF41"
+        previewWidget.textEl.style.overflow = "hidden"
+        previewWidget.textEl.style["font-size"] = "smaller"
+        previewWidget.textEl.style["padding"] = "4%"
+        previewWidget.textEl.style["background-color"] = "black"
+        previewWidget.textEl.hidden = true
+
+        this.updateParameters = (params, force_update) => {
+            if (!previewWidget.value.params) {
+                if (typeof (previewWidget.value != 'object')) {
+                    previewWidget.value = { hidden: false, paused: false }
+                }
+                previewWidget.value.params = {}
+            }
+            Object.assign(previewWidget.value.params, params)
+
+            if (force_update) {
+                previewWidget.updateSource();
+            }
+        };
+        previewWidget.updateSource = function () {
+            if (this.value.params == undefined) {
+                return;
+            }
+            let params = {}
+            Object.assign(params, this.value.params);//shallow copy
+            this.parentEl.hidden = this.value.hidden;
+
+            if (params.previews && params.data) {
+
+                previewWidget.videoEl.src = api.apiURL('/view?' + new URLSearchParams(params.previews[0]));
+
+                const { frame_rate, video_title, resolution } = params.data[0]
+                previewWidget.textEl.value = `RESOLUTION: ${resolution}, FPS: ${frame_rate}\nTITLE: ${video_title}`
+
+                this.videoEl.autoplay = true;
+                this.videoEl.hidden = false;
+                this.textEl.hidden = false;
+            } else {
+                this.textEl.hidden = true;
+                this.videoEl.hidden = true;
+            }
+        }
+        previewWidget.parentEl.appendChild(previewWidget.textEl)
+        previewWidget.parentEl.appendChild(previewWidget.videoEl)
+    });
+}
+
+app.registerExtension({
+    name: "pronodes.youtube_video_display",
+    async beforeRegisterNodeDef(nodeType, nodeData, app) {
+
+        if (nodeData?.name == "LoadYoutubeVideoNode") {
+            chainCallback(nodeType.prototype, "onExecuted", function (message) {
+                if (message?.previews) {
+                    this.updateParameters(message, true);
+                }
+            });
+            addVideoPreview(nodeType);
+
+            //Hide the information passing 'preview' output
+            //TODO: check how this is implemented for save image
+            chainCallback(nodeType.prototype, "onNodeCreated", function () {
+                this._outputs = this.outputs
+                Object.defineProperty(this, "outputs", {
+                    set: function (value) {
+                        this._outputs = value;
+                        requestAnimationFrame(() => {
+                            if (app.nodeOutputs[this.id + ""]) {
+                                this.updateParameters(app.nodeOutputs[this.id + ""], true);
+                            }
+                        })
+                    },
+                    get: function () {
+                        return this._outputs;
+                    }
+                });
+                //Display previews after reload/ loading workflow
+                requestAnimationFrame(() => { this.updateParameters({}, true); });
+            });
+        }
+    },
+});
