@@ -12,8 +12,13 @@
 - Displays the video and other details (fps/title) at the bottom of the node
 - Seamless integration with [ComfyUI-VideoHelperSuite](https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite)
 
+### Preview VHS Audio
+
+- Displays audio from [ComfyUI-VideoHelperSuite](https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite)
+
 ## Changelog
 
+- 08/03/2024 - Added display VHS audio node
 - 03/02/2024 - Refactor js with chaincallback (from VHS) + display video on reload
 - 17/02/2024 - Added video + fps + title + resolution preview under LYV node
 - 15/02/2024 - Simplify LYV node & remove VHS codes
