@@ -18,13 +18,15 @@ class PreviewVHSAudioNode:
     def main(self,audio):
         # save audio
         audio_save_name = "vhs_audio_preview.wav"
-        audio_save_path = os.path.join(folder_paths.get_output_directory(),audio_save_name)
+        os.makedirs(folder_paths.get_temp_directory(), exist_ok=True)
+        audio_save_path = os.path.join(folder_paths.get_temp_directory(),audio_save_name)
         with open(audio_save_path, 'wb') as file:
             file.write(audio())
 
         previews = [
             {
-                "filename": audio_save_name
+                "filename": audio_save_name,
+                "type":"temp"
             }
         ]
 
