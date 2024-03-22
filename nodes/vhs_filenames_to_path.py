@@ -1,7 +1,7 @@
 import folder_paths
 import os
 
-class VHSFilenamesToPath:
+class VHSFilenamesToPathNode:
     @classmethod
     def INPUT_TYPES(s):
         return {
