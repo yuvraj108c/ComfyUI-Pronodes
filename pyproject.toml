@@ -1,0 +1,15 @@
+[project]
+name = "comfyui-pronodes"
+description = "A collection of nice utility nodes for ComfyUI"
+version = "1.0.0"
+license = "LICENSE"
+dependencies = ["yt_dlp", "imageio[ffmpeg]"]
+
+[project.urls]
+Repository = "https://github.com/yuvraj108c/ComfyUI-Pronodes"
+#  Used by Comfy Registry https://comfyregistry.org
+
+[tool.comfy]
+PublisherId = ""
+DisplayName = "ComfyUI-Pronodes"
+Icon = ""
